@@ -46,3 +46,21 @@ stages:
           echo "Deploying application to AKS"
           kubectl apply -f manifests/deployment.yaml
           kubectl apply -f manifests/service.yaml
+- stage: DestroyInfra
+  displayName: "Destroy Terraform Infrastructure"
+  jobs:
+  - job: TerraformDestroy
+    pool:
+      name: Default
+    steps:
+    - checkout: self
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: 'Azure-SP-Connection'
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          echo "Destroying Terraform infrastructure"
+          cd terraform
+          terraform init
+          terraform destroy -auto-approve
