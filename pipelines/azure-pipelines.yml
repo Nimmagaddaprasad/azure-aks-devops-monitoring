@@ -1,0 +1,38 @@
+trigger:
+- main
+
+stages:
+- stage: Terraform
+  jobs:
+  - job: ApplyTerraform
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - checkout: self
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: '<Your-Service-Connection>'
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          cd terraform
+          terraform init
+          terraform apply -auto-approve
+
+- stage: DeployApp
+  dependsOn: Terraform
+  jobs:
+  - job: DeployToAKS
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - checkout: self
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: '<Your-Service-Connection>'
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          az aks get-credentials --resource-group sre-demo-rg --name sre-aks-cluster
+          kubectl apply -f manifests/deployment.yaml
+          kubectl apply -f manifests/service.yaml
