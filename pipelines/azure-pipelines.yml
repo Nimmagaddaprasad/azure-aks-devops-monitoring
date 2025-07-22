@@ -15,24 +15,7 @@ stages:
         scriptType: bash
         scriptLocation: inlineScript
         inlineScript: |
-          cd terraform
-          terraform init
-          terraform apply -auto-approve
-
-- stage: DeployApp
-  dependsOn: Terraform
-  jobs:
-  - job: DeployToAKS
-    pool:
-      name: Default  # 👈 Again use self-hosted pool
-    steps:
-    - checkout: self
-    - task: AzureCLI@2
-      inputs:
-        azureSubscription: 'Azure-SP-Connection'
-        scriptType: bash
-        scriptLocation: inlineScript
-        inlineScript: |
-          az aks get-credentials --resource-group sre-demo-rg --name sre-aks-cluster
-          kubectl apply -f manifests/deployment.yaml
-          kubectl apply -f manifests/service.yaml
+          echo "Logging into Azure and exporting ARM environment variables for Terraform"
+          
+          export ARM_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+          export ARM_CLIENT_ID=$(az account show --query user.name -o tsv
