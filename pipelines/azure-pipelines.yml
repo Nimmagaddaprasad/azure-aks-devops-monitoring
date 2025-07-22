@@ -6,7 +6,7 @@ stages:
   jobs:
   - job: ApplyTerraform
     pool:
-      vmImage: Default
+      name: Default  # 👈 Self-hosted agent pool
     steps:
     - checkout: self
     - task: AzureCLI@2
@@ -24,7 +24,7 @@ stages:
   jobs:
   - job: DeployToAKS
     pool:
-      vmImage: Default
+      name: Default  # 👈 Again use self-hosted pool
     steps:
     - checkout: self
     - task: AzureCLI@2
