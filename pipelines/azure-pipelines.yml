@@ -6,7 +6,7 @@ stages:
   jobs:
   - job: ApplyTerraform
     pool:
-      vmImage: ubuntu-latest
+      vmImage: Default
     steps:
     - checkout: self
     - task: AzureCLI@2
@@ -24,7 +24,7 @@ stages:
   jobs:
   - job: DeployToAKS
     pool:
-      vmImage: ubuntu-latest
+      vmImage: Default
     steps:
     - checkout: self
     - task: AzureCLI@2
