@@ -11,7 +11,7 @@ stages:
     - checkout: self
     - task: AzureCLI@2
       inputs:
-        azureSubscription: '<Your-Service-Connection>'
+        azureSubscription: 'Azure-SP-Connection'
         scriptType: bash
         scriptLocation: inlineScript
         inlineScript: |
@@ -29,7 +29,7 @@ stages:
     - checkout: self
     - task: AzureCLI@2
       inputs:
-        azureSubscription: '<Your-Service-Connection>'
+        azureSubscription: 'Azure-SP-Connection'
         scriptType: bash
         scriptLocation: inlineScript
         inlineScript: |
